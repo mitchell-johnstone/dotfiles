@@ -33,32 +33,13 @@
 
 using namespace std;
 
-// easy io
-template<typename ...Args>
-void OUT(Args && ...args) { (std::cout << ... << args); }
-
-template <typename ...Args>
-auto &read(Args &...args) { return (cin >> ... >> args); }
-
-#define READ(...) __VA_ARGS__; read(__VA_ARGS__)
+// fast io
+void fast_io(){ios_base::sync_with_stdio(false);cin.tie(NULL);}
 
 // constants
 const double PI = 3.1415926585323;
 const int MOD = 1e9 + 7;
 
-// -------------------SOLUTION--------------------//
-int solve(){
-    
-    return 0;
-}
-
 // -------------------MAIN CODE-------------------//
-int main(){
-    int t;
-    cin>>t;
-    for(int i = 1; i <= t; i++){
-        cout<<"Case #"<<i<<": "<<endl;
-        solve();
-    }
-    return 0;
+void main(){
 }

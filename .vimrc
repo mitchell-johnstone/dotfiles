@@ -5,18 +5,18 @@
 source $VIMRUNTIME/vimrc_example.vim
 
 " Plugin options
-source ~/vimfiles/plugin.vim
+source ~/.vim/plugin.vim
 
 " Setup options
-source ~/vimfiles/setup.vim
+source ~/.vim/setup.vim
 
 " Indentation options
-source ~/vimfiles/indent.vim
+source ~/.vim/indent.vim
  
 " Mapping options
-source ~/vimfiles/mapping.vim
+source ~/.vim/mapping.vim
 
 " Templates!
-source ~/vimfiles/templates.vim
+source ~/.vim/templates.vim
 
 " :)

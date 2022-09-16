@@ -1,5 +1,6 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =6
+let g:netrw_dirhistcnt =7
+let g:netrw_dirhist_7='/home/johnstonem/.vim/templates'
 let g:netrw_dirhist_6='C:\Users\johnstonem\IdeaProjects\DataStructures\lab9jones-mitchell-johnstone\src\betterImplementation'
 let g:netrw_dirhist_5='C:/Users/johnstonem/vimfiles/~'
 let g:netrw_dirhist_4='C:/Users/johnstonem/vimfiles/templates'

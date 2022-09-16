@@ -14,9 +14,9 @@ let g:ycm_autoclose_preview_window_after_completion=1
 " set backups
 set backup
 set writebackup
-set backupdir=%TMP%
-set undodir=%TMP%
-set dir=%TMP%
+set backupdir=/tmp
+set undodir=/tmp
+set dir=/tmp
 set backupcopy=yes
 
 " Enable use of the mouse for all modes

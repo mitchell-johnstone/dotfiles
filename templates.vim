@@ -1,6 +1,6 @@
 " Templates!
 if has("autocmd")
 	augroup templates
-		autocmd BufNewFile *cpp 0r ~/vimfiles/templates/skeleton.cpp | 51
+		autocmd BufNewFile *cpp 0r ~/.vim/templates/skeleton.cpp | 44
 	augroup END
 endif
