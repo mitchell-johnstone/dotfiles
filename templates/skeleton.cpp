@@ -22,7 +22,7 @@
 #define inRange(x,y,l,w) (x >= 0 && x < l && y >= 0 && y < w)
 #define minimum(a) *min_element(a.begin(), a.end())
 #define maximum(a) *max_element(a.begin(), a.end())
-#define in_map(m,e) (m.find(e) == m.end())
+#define in_map(m,e) (m.find(e) != m.end())
 #define findchar(s,c) s.find(c)==string::npos?-1:s.find(c);
 #define repi(a) for(int i = 0; i < a; i++)
 #define repj(a) for(int j = 0; j < a; j++)
@@ -41,5 +41,6 @@ const double PI = 3.1415926585323;
 const int MOD = 1e9 + 7;
 
 // -------------------MAIN CODE-------------------//
-void main(){
+int main(){
+    return 0;
 }
