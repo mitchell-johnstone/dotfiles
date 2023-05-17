@@ -23,7 +23,7 @@
 #define minimum(a) *min_element(a.begin(), a.end())
 #define maximum(a) *max_element(a.begin(), a.end())
 #define in_map(m,e) (m.find(e) != m.end())
-#define findchar(s,c) s.find(c)==string::npos?-1:s.find(c);
+#define findchar(s,c) ((s.find(c)==string::npos)?(-1):(s.find(c)))
 #define repi(a) for(int i = 0; i < a; i++)
 #define repj(a) for(int j = 0; j < a; j++)
 #define repk(a) for(int k = 0; k < a; k++)
