@@ -15,6 +15,8 @@ inoremap {<CR> {<CR>}<Esc>O
 inoremap {{ {
 inoremap {} {}
 
+inoremap """<CR> """<CR>"""<Esc>O
+
 autocmd filetype cpp nnoremap <F9> :w <bar> !clear & g++ -std=c++17 "%" -o "%:r" <CR>
 autocmd filetype cpp nnoremap <F10> :!clear & "./%:r" <CR>
 autocmd filetype cpp nnoremap <C-C> :s/^\(\s*\)/\1\/\/<CR> :s/^\(\s*\)\/\/\/\//\1<CR> $

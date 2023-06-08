@@ -6,7 +6,7 @@
 " au BufRead,BufNewFile *.py,*.pyw,*.c,*.cpp,*.h match BadWhitespace /\s\+$/
 
 " This enable the user to copy, cut, paste from other applications into vim
-set clipboard=unnamed
+set clipboard=unnamedplus
 
 " Some options to optimise the auto-complete
 let g:ycm_autoclose_preview_window_after_completion=1
