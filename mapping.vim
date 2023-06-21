@@ -20,7 +20,7 @@ inoremap {{ {
 inoremap {} {}
 
 " Python triple quotes for string comments
-autocmd filetype py inoremap """<CR> """<CR>"""<Esc>O
+autocmd filetype python inoremap """<CR> """<CR>"""<Esc>O
 
 " C++ compilation and execution, and commenting
 autocmd filetype cpp nnoremap <F9> :w <bar> !clear & g++ -std=c++17 "%" -o "%:r" <CR>
