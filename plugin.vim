@@ -9,3 +9,6 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " end plug
 call plug#end()
+
+" Ctags auto generation
+au BufWritePost *.c,*.cpp,*.h,*.py silent! !ctags -R &
