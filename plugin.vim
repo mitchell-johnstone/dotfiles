@@ -11,4 +11,5 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 
 " Ctags auto generation
-au BufWritePost *.c,*.cpp,*.h,*.py silent! !ctags -R &
+" au BufWritePost *.c,*.cpp,*.h,*.py silent! !ctags -R &
+au BufWritePost *.c,*.cpp,*.h silent! !ctags -R &
