@@ -1,8 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =6
-let g:netrw_dirhist_6='C:\Users\johnstonem\IdeaProjects\DataStructures\lab9jones-mitchell-johnstone\src\betterImplementation'
-let g:netrw_dirhist_5='C:/Users/johnstonem/vimfiles/~'
-let g:netrw_dirhist_4='C:/Users/johnstonem/vimfiles/templates'
-let g:netrw_dirhist_3='C:/intelFPGA_lite/18.1/nios2eds/bin/eclipse_nios2'
-let g:netrw_dirhist_2='C:/Users/johnstonem/vimfiles/templates'
-let g:netrw_dirhist_1='C:/Users/johnstonem/vimfiles'
