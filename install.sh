@@ -16,3 +16,14 @@ rm -rf ~/.local/share/nvim/lazy
 rm -rf ~/.config/nvim
 mkdir -p ~/.config/
 cp -r ./.config/nvim ~/.config/nvim
+
+###############
+# TMUX
+###############
+
+# Add the Tmux content
+# Uses TPM for package manager
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+cp ./.tmux.conf ~/
+# Need to install packages with Prefix <C-a> and then capital I
+
