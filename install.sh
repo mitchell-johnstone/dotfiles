@@ -1,6 +1,10 @@
 #!/bin/sh
 sudo apt-get update  # To get the latest package lists
 
+###############
+# NVIM
+###############
+
 ## Languages! 
 # install c++ content
 sudo apt install build-essential
