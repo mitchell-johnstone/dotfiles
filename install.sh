@@ -1,5 +1,7 @@
 #!/bin/sh
-sudo apt-get update  # To get the latest package lists
+sudo apt update # To get the latest package lists
+sudo apt install snapd # install snapd to install packages
+sudo snap install core # install snapd runtime env
 
 ###############
 # NVIM
@@ -19,7 +21,7 @@ sudo snap install --edge nvim --classic
 rm -rf ~/.local/share/nvim/lazy
 rm -rf ~/.config/nvim
 mkdir -p ~/.config/
-cp -r ./.config/nvim ~/.config/nvim
+cp -r dotfiles/.config/nvim ~/.config/nvim
 
 ###############
 # TMUX
@@ -28,6 +30,11 @@ cp -r ./.config/nvim ~/.config/nvim
 # Add the Tmux content
 # Uses TPM for package manager
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-cp ./.tmux.conf ~/
+cp dotfiles/.tmux.conf ~/
 # Need to install packages with Prefix <C-a> and then capital I
 
+###############
+# Bash Setup
+###############
+
+cp dotfiles/.bash_aliases ~/
