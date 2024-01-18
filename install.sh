@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 sudo apt update # To get the latest package lists
+# Install and start snap
 sudo apt install snapd # install snapd to install packages
 sudo snap install core # install snapd runtime env
 
@@ -13,13 +14,18 @@ sudo apt install build-essential
 sudo snap install clangd --classic
 # install nodejs content
 sudo snap install node --classic
+# Install python content
+sudo snap install pyright --classic
+
+# Remove old files
+rm -rf ~/.local/share/nvim
+rm -rf ~/.config/nvim
 
 # Install neovim
 # nightly builds for latest, from https://github.com/neovim/neovim/blob/master/INSTALL.md
 sudo snap install --edge nvim --classic
+
 # setup the configuration
-rm -rf ~/.local/share/nvim/lazy
-rm -rf ~/.config/nvim
 mkdir -p ~/.config/
 cp -r nvim/config/nvim ~/.config/nvim
 
@@ -28,15 +34,18 @@ cp -r nvim/config/nvim ~/.config/nvim
 ###############
 mkdir -p ~/.vim
 mkdir -p ~/.vim/bundle # for pathogen https://github.com/tpope/vim-pathogen
+mkdir -p ~/.vim/skeleton
 
 # Install Universal ctags for gutentags
 sudo apt install universal-ctags
 
 # Install pathogen
-mkdir -p ~/.vim/autoload ~/.vim/bundle && \
-curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+mkdir -p ~/.vim/autoload && \
+    curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 
+# Copy necessary config files
 cp vim/vimrc ~/.vim/vimrc
+cp vim/skeleton/* ~/.vim/skeleton/
 
 # install gruvbox :(
 # mkdir -p ~/.vim/colors
@@ -53,19 +62,12 @@ REPOS=(
 pushd ~/.vim/bundle/
 for REPO in ${REPOS[@]}
 do
-    git clone ${REPO} ${INSTALL_PATH}
-    # NAME=$(echo $REPO | rev | cut -d/ -f1 | rev | cut -d. -f1)
-    # echo "Installing ${NAME}..."
-    # INSTALL_PATH="~/.vim/bundle/${NAME}"
-    # echo "Installing to ${INSTALL_PATH}..."
-    # if [[ ! -d "${INSTALL_PATH}" ]]
-    # then
-    #     git clone ${REPO} ${INSTALL_PATH}
-    # fi
+    git clone ${REPO}
 done
 
-mv ~/.vim/bundle/gruvbox/colors/* ~/.vim/colors/
-mv ~/.vim/bundle/gruvbox/autoload/* ~/.vim/autoload/
+# Probably don't need to handle, the gruvbox will install from pathogen
+# mv ~/.vim/bundle/gruvbox/colors/* ~/.vim/colors/
+# mv ~/.vim/bundle/gruvbox/autoload/* ~/.vim/autoload/
 popd
 
 ###############
@@ -85,11 +87,19 @@ cp tmux/tmux.conf ~/.tmux.conf
 # Bash Setup
 ###############
 
-cp bash/bash_aliases ~/.bash_aliases
+if [[ ! -f ~/.bash_aliases ]]
+then
+    cp bash/bash_aliases ~/.bash_aliases
+fi 
 
 # Add a nice fortune teller to bashrc
 sudo apt-get install cowsay fortune lolcat
-echo "fortune | cowsay | lolcat" >> ~/.bashrc
+
+# Only add grep 
+if [[ -z $(grep -F "fortune | cowsay | lolcat" ~/.bashrc) ]]
+then
+    echo "fortune | cowsay | lolcat" >> ~/.bashrc
+fi
 
 # Add in the Tao of the Programming to fortune teller
 sudo sh -c 'cat fortune/tao-compressed | base64 -d | gunzip > /usr/share/games/fortunes/tao'

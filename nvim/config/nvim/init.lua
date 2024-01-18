@@ -213,14 +213,15 @@ require('lazy').setup({
     },
   },
 
-  {
-    -- Add indentation guides even on blank lines
-    'lukas-reineke/indent-blankline.nvim',
-    -- Enable `lukas-reineke/indent-blankline.nvim`
-    -- See `:help ibl`
-    main = 'ibl',
-    opts = {},
-  },
+  -- Had a breaking change, needs to be updated
+  -- {
+  --   -- Add indentation guides even on blank lines
+  --   'lukas-reineke/indent-blankline.nvim',
+  --   -- Enable `lukas-reineke/indent-blankline.nvim`
+  --   -- See `:help ibl`
+  --   main = 'ibl',
+  --   opts = {},
+  -- },
 
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
@@ -254,6 +255,20 @@ require('lazy').setup({
     },
     build = ':TSUpdate',
   },
+
+  {
+    -- Templating
+    'glepnir/template.nvim',
+    cmd = {'Template','TemProject'}, config = function()
+    require('template').setup({
+      {
+        temp_dir = '~/.config/nvim/templates/',
+        author = 'Mitchell Johnstone',
+        email = 'mitch2579@gmail.com'
+      }
+    })
+    end
+  }
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
@@ -613,7 +628,8 @@ mason_lspconfig.setup_handlers {
 -- See `:help cmp`
 local cmp = require 'cmp'
 local luasnip = require 'luasnip'
-require('luasnip.loaders.from_vscode').lazy_load()
+-- CONFIG NOT ON RTP, SO WORKAROUND: require('luasnip.loaders.from_vscode').lazy_load()
+require("luasnip.loaders.from_vscode").lazy_load({paths = "~/.config/nvim/snippets"})
 luasnip.config.setup {}
 
 cmp.setup {

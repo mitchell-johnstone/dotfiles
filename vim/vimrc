@@ -248,7 +248,7 @@ endif
 " Templates! {{{
 if has("autocmd")
 	augroup templates
-		autocmd BufNewFile *cpp 0r ~/.vim/skeleton.cpp | 15
+		autocmd BufNewFile *cpp 0r ~/.vim/skeleton/cpp.cpp | 15
 	augroup END
 endif
 " }}}
