@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
-sudo apt update # To get the latest package lists
+
+# Get the latest package lists
+sudo apt update
+sudo apt upgrade
+
 # Install and start snap
 sudo apt install snapd # install snapd to install packages
 sudo snap install core # install snapd runtime env
+sudo snap install curl # install curl command, used later
 
 ###############
 # NVIM
@@ -32,6 +37,11 @@ cp -r nvim/config/nvim ~/.config/nvim
 ###############
 # VIM
 ###############
+
+# Install vim
+sudo apt install vim
+
+# Make config directories
 mkdir -p ~/.vim
 mkdir -p ~/.vim/bundle # for pathogen https://github.com/tpope/vim-pathogen
 mkdir -p ~/.vim/skeleton
@@ -40,16 +50,18 @@ mkdir -p ~/.vim/skeleton
 sudo apt install universal-ctags
 
 # Install pathogen
-mkdir -p ~/.vim/autoload && \
-    curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+mkdir -p ~/.vim/autoload ~/.vim/bundle && \
+curl https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim > ~/.vim/autoload/pathogen.vim
+# NOTE: THE URL for Pathogen changed. The old curl command was:
+# curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 
 # Copy necessary config files
 cp vim/vimrc ~/.vim/vimrc
 cp vim/skeleton/* ~/.vim/skeleton/
 
 # install gruvbox :(
-# mkdir -p ~/.vim/colors
-# curl -LSso https://raw.githubusercontent.com/morhetz/gruvbox/master/colors/gruvbox.vim > ~/.vim/colors/gruvbox.vim
+# mkdir -p ~/.vim/colors && \
+#     curl -LSso https://raw.githubusercontent.com/morhetz/gruvbox/master/colors/gruvbox.vim > ~/.vim/colors/gruvbox.vim
 
 REPOS=(
     "https://github.com/ludovicchabant/vim-gutentags.git"
@@ -70,9 +82,9 @@ done
 # mv ~/.vim/bundle/gruvbox/autoload/* ~/.vim/autoload/
 popd
 
-###############
+#######
 # TMUX
-###############
+#######
 
 # Add the Tmux content
 # Uses TPM for package manager
@@ -83,19 +95,19 @@ fi
 cp tmux/tmux.conf ~/.tmux.conf
 # Need to install packages with Prefix <C-a> and then capital I
 
-###############
+#############
 # Bash Setup
-###############
+#############
 
 if [[ ! -f ~/.bash_aliases ]]
 then
     cp bash/bash_aliases ~/.bash_aliases
-fi 
+fi
 
 # Add a nice fortune teller to bashrc
 sudo apt-get install cowsay fortune lolcat
 
-# Only add grep 
+# Only add grep
 if [[ -z $(grep -F "fortune | cowsay | lolcat" ~/.bashrc) ]]
 then
     echo "fortune | cowsay | lolcat" >> ~/.bashrc

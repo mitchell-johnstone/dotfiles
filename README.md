@@ -8,7 +8,8 @@ Can be easily ran and is editable.
 
 To download my usual packages, clone the repo and run the install script provided:
 ```bash
-cd ~ 
+cd ~
 && gh repo clone mitchell-johnstone/dotfiles
-&& sudo dotfiles/install.sh
+&& cd dotfiles
+&& install.sh
 ```
