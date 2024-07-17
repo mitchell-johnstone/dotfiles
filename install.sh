@@ -9,9 +9,7 @@ sudo apt install snapd # install snapd to install packages
 sudo snap install core # install snapd runtime env
 sudo snap install curl # install curl command, used later
 
-###############
-# NVIM
-###############
+sudo apt-get install cowsay fortune lolcat
 
 ## Languages!
 # install c++ content
@@ -26,6 +24,15 @@ sudo snap install pyright --classic
 rm -rf ~/.local/share/nvim
 rm -rf ~/.config/nvim
 
+## Tools for VIM/NVIM
+# BurntSushi/ripgrep github
+sudo apt-get install ripgrep
+# Install Universal ctags for gutentags
+sudo apt install universal-ctags
+
+# }}}
+# NVIM {{{
+
 # Install neovim
 # nightly builds for latest, from https://github.com/neovim/neovim/blob/master/INSTALL.md
 sudo snap install --edge nvim --classic
@@ -34,20 +41,14 @@ sudo snap install --edge nvim --classic
 mkdir -p ~/.config/
 cp -r nvim/config/nvim ~/.config/nvim
 
-###############
-# VIM
-###############
-
 # Install vim
 sudo apt install vim
 
-# Make config directories
+# }}} 
+# VIM {{{
 mkdir -p ~/.vim
 mkdir -p ~/.vim/bundle # for pathogen https://github.com/tpope/vim-pathogen
 mkdir -p ~/.vim/skeleton
-
-# Install Universal ctags for gutentags
-sudo apt install universal-ctags
 
 # Install pathogen
 mkdir -p ~/.vim/autoload ~/.vim/bundle && \
@@ -59,9 +60,9 @@ curl https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathog
 cp vim/vimrc ~/.vim/vimrc
 cp vim/skeleton/* ~/.vim/skeleton/
 
-# install gruvbox :(
-# mkdir -p ~/.vim/colors && \
-#     curl -LSso https://raw.githubusercontent.com/morhetz/gruvbox/master/colors/gruvbox.vim > ~/.vim/colors/gruvbox.vim
+# install gruvbox
+# mkdir -p ~/.vim/colors
+# curl -LSso https://raw.githubusercontent.com/morhetz/gruvbox/master/colors/gruvbox.vim > ~/.vim/colors/gruvbox.vim
 
 REPOS=(
     "https://github.com/ludovicchabant/vim-gutentags.git"
@@ -82,9 +83,8 @@ done
 # mv ~/.vim/bundle/gruvbox/autoload/* ~/.vim/autoload/
 popd
 
-#######
-# TMUX
-#######
+# }}}
+# TMUX {{{
 
 # Add the Tmux content
 # Uses TPM for package manager
@@ -93,11 +93,10 @@ then
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 cp tmux/tmux.conf ~/.tmux.conf
-# Need to install packages with Prefix <C-a> and then capital I
+# Need to install packages with Prefix+I
 
-#############
-# Bash Setup
-#############
+# }}}
+# Bash Setup {{{
 
 if [[ ! -f ~/.bash_aliases ]]
 then
@@ -116,3 +115,5 @@ fi
 # Add in the Tao of the Programming to fortune teller
 sudo sh -c 'cat fortune/tao-compressed | base64 -d | gunzip > /usr/share/games/fortunes/tao'
 sudo strfile -c % /usr/share/games/fortunes/tao /usr/share/games/fortunes/tao.dat
+
+# }}}
