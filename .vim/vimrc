@@ -5,13 +5,14 @@
 "    \    /    |  | |  |  |  | |  |\  \----.|  `----.
 "     \__/     |__| |__|  |__| | _| `._____| \______|
 "
+" Mitchell Johnstone 9/02/24
 " Mitchell Johnstone 5/20/24
 " Sam Keyser 1/6/24
 
 " Package manager
 " https://github.com/tpope/vim-pathogen
+runtime bundle/vim-pathogen/autoload/pathogen.vim
 execute pathogen#infect()
-" https://github.com/udalov/kotlin-vim
 
 " NVIM {{{
 if has('nvim')

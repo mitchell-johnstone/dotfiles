@@ -8,8 +8,12 @@ Can be easily ran and is editable.
 
 To download my usual packages, clone the repo and run the install script provided:
 ```bash
-cd ~
-&& gh repo clone mitchell-johnstone/dotfiles
+git clone --recurse-submodules -j8 mitchell-johnstone/dotfiles ~/dotfiles
 && cd dotfiles
-&& install.sh
+&& ./install.sh
 ```
+
+To uninstall:
+```bash
+cd ~/dotfiles
+&& stow -D .
