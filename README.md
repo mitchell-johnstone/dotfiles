@@ -9,11 +9,12 @@ Can be easily ran and is editable.
 To download my usual packages, clone the repo and run the install script provided:
 ```bash
 git clone --recurse-submodules -j8 git@github.com:mitchell-johnstone/dotfiles.git ~/dotfiles
-&& cd dotfiles
-&& ./install.sh
+cd dotfiles
+./install.sh
 ```
 
 To uninstall:
 ```bash
 cd ~/dotfiles
-&& stow -D .
+stow -D .
+```
