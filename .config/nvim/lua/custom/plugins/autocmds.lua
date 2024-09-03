@@ -17,6 +17,7 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 -- Format python files using black when saving
 -- https://neovim.io/doc/user/autocmd.html
 -- https://stackoverflow.com/questions/77147995/setting-up-formatters-in-neovim-with-mason-lsp-zero
+-- vim.api.nvim_create_autocmd({ "BufWinLeave" }, {
 vim.api.nvim_create_autocmd({ "BufWritePost" }, {
     pattern = { "*.py" },
     desc = "Auto-format Python files after saving",
@@ -24,7 +25,9 @@ vim.api.nvim_create_autocmd({ "BufWritePost" }, {
         local fileName = vim.api.nvim_buf_get_name(0)
         vim.cmd(":silent !black --preview -q " .. fileName)
         vim.cmd(":silent !isort --profile black --float-to-top -q " .. fileName)
-        vim.cmd(":silent !docformatter --in-place --black " .. fileName)
+        -- vim.cmd(":silent !flake8 " .. fileName)
+        -- vim.cmd(":silent !docformatter --in-place --black " .. fileName)
+        -- vim.cmd(":!pipenv run mypy --config-file /mnt/c/Work/AMA/account-manager-assistant/pyproject.toml ./&")
     end,
     group = autocmd_group,
 })
