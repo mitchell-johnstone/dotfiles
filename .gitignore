@@ -1,3 +1,7 @@
 .netrwhist
 **/lazy-lock.json
 **/tmp
+.config/github-copilot
+.config/tmuxinator
+.tmux/plugins/tmux
+.tmux/plugins/tmux-sensible

@@ -19,6 +19,9 @@ sudo snap install clangd --classic # install c++ content
 sudo snap install node --classic # install nodejs content
 sudo snap install pyright --classic # install python content
 
+# Add difftastic!
+sudo snap install difftastic
+
 # }}}
 # VIM / NVIM {{{
 # Remove old files
@@ -42,6 +45,9 @@ sudo apt install vim
 
 # }}}
 # TMUX {{{
+
+# tmuxinator
+gem install tmuxinator
 
 # Uses TPM for package manager
 # https://github.com/tmux-plugins/tpm

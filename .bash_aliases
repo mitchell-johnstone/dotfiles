@@ -1,0 +1,7 @@
+alias downloads="cd /mnt/c/Users/mitchelj/Downloads"
+alias resource="source ~/.profile"
+alias work="cd ~/repos/account-manager-assistant"
+alias wslconfig="vim /mnt/c/Users/mitchelj/.wslconfig"
+alias mux="tmuxinator"
+alias ks="tmux kill-session -t concierge"
+alias con="mux start concierge"
