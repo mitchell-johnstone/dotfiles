@@ -19,11 +19,14 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 -- https://stackoverflow.com/questions/77147995/setting-up-formatters-in-neovim-with-mason-lsp-zero
 -- vim.api.nvim_create_autocmd({ "BufWinLeave" }, {
 vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-    pattern = { "*.py" },
+    pattern = { "/*.py" },
     desc = "Auto-format Python files after saving",
     callback = function()
         local fileName = vim.api.nvim_buf_get_name(0)
+        local shortName = fileName:match("^.+/(.+)$")
+        vim.notify("black-formatting " .. shortName, "info", { title = "Auto-formatting" })
         vim.cmd(":silent !black --preview -q " .. fileName)
+        vim.notify("import sorting " .. shortName, "info", { title = "Auto-formatting" })
         vim.cmd(":silent !isort --profile black --float-to-top -q " .. fileName)
         -- vim.cmd(":silent !flake8 " .. fileName)
         -- vim.cmd(":silent !docformatter --in-place --black " .. fileName)

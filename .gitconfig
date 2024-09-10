@@ -12,15 +12,15 @@
         prompt = false
 
 [difftool "difftastic"]
-        cmd = difft "$LOCAL" "$REMOTE"
-
-[pager]
-        difftool = true
+        cmd = difft --diff "$LOCAL" "$REMOTE"
 
 # `git dft` is less to type than `git difftool`.
 [alias]
-        dft = difftool
+        dft = "!f() { TMPDIR=~/tmp GIT_EXTERNAL_DIFF=difftastic git diff \"$@\"; }; f"
 
 # `git dlog` to show `git log -p` with difftastic.
 [alias]
         dlog = -c diff.external=difft log -p --ext-diff
+[user]
+	email = mitchell.johnstone@directsupply.com
+	name = Mitchell Johnstone
