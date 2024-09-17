@@ -22,5 +22,8 @@
 [alias]
         dlog = -c diff.external=difft log -p --ext-diff
 [user]
-	email = mitchell.johnstone@directsupply.com
-	name = Mitchell Johnstone
+        email = mitchell.johnstone@directsupply.com
+        name = Mitchell Johnstone
+
+[mergetool "nvimdiff"]
+        layout = "LOCAL,BASE,REMOTE / MERGED"

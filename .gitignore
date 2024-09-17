@@ -5,3 +5,4 @@
 .config/tmuxinator
 .tmux/plugins/tmux
 .tmux/plugins/tmux-sensible
+.tmux/plugins/

@@ -57,7 +57,7 @@ endif
 :set go+=a
 
 " Save
-nnoremap <silent> <F2> <ESC>:w<CR>
+nnoremap <silent> <F2> :w<CR>
 inoremap <silent> <F2> <ESC>:w<CR>i
 
 " Searching
@@ -253,6 +253,15 @@ hi Normal guibg=NONE ctermbg=NONE
 if &term =~ '256color'
     set t_ut=
 endif
+" }}}
+" TMUX Nice Navigation {{{
+let g:tmux_navigator_no_mappings = 1
+
+nnoremap <silent> <M-h> :<C-U>TmuxNavigateLeft<cr>
+nnoremap <silent> <M-j> :<C-U>TmuxNavigateDown<cr>
+nnoremap <silent> <M-k> :<C-U>TmuxNavigateUp<cr>
+nnoremap <silent> <M-l> :<C-U>TmuxNavigateRight<cr>
+nnoremap <silent> <M-\> :<C-U>TmuxNavigatePrevious<cr>
 " }}}
 " Templates! {{{
 if has("autocmd")
