@@ -12,6 +12,9 @@ vim.wo.relativenumber = true
 -- Enable mouse mode
 vim.o.mouse = 'a'
 
+-- Don't show the mode, since it's already in the status line
+vim.opt.showmode = false
+
 -- Sync clipboard between OS and Neovim.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
@@ -41,14 +44,32 @@ vim.o.completeopt = 'menuone,noselect'
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
+-- Sets how neovim will display certain whitespace characters in the editor.
+--  See `:help 'list'`
+--  and `:help 'listchars'`
+vim.opt.list = true
+vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+
+-- Preview substitutions live, as you type!
+vim.opt.inccommand = 'split'
+
+-- Show which line your cursor is on
+vim.opt.cursorline = true
+
+-- Minimal number of screen lines to keep above and below the cursor.
+vim.opt.scrolloff = 10
+
 -- for now, don't use an editorconfig file
 -- see /snap/nvim/2824/usr/share/nvim/runtime/lua/editorconfig.lua
 -- vim.g.editorconfig = false
 
 -- Set the fileformat to be unix
-vim.o.fileformat = "unix"
+-- vim.o.fileformat = "unix"
 
 -- Set the linebreak
 vim.o.linebreak = true
+
+-- set autoread
+vim.opt.autoread = true
 
 return {}

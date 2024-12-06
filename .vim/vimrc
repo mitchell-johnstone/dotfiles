@@ -255,13 +255,17 @@ if &term =~ '256color'
 endif
 " }}}
 " TMUX Nice Navigation {{{
-let g:tmux_navigator_no_mappings = 1
-
-nnoremap <silent> <M-h> :<C-U>TmuxNavigateLeft<cr>
-nnoremap <silent> <M-j> :<C-U>TmuxNavigateDown<cr>
-nnoremap <silent> <M-k> :<C-U>TmuxNavigateUp<cr>
-nnoremap <silent> <M-l> :<C-U>TmuxNavigateRight<cr>
-nnoremap <silent> <M-\> :<C-U>TmuxNavigatePrevious<cr>
+"let g:tmux_navigator_no_mappings = 1
+"
+"map \033h$ <M-h>
+"map \033j$ <M-j>
+"map \033k$ <M-k>
+"map \033l$ <M-l>
+"nnoremap <silent> <M-h> :<C-U>TmuxNavigateLeft<cr>
+"nnoremap <silent> <M-j> :<C-U>TmuxNavigateDown<cr>
+"nnoremap <silent> <M-k> :<C-U>TmuxNavigateUp<cr>
+"nnoremap <silent> <M-l> :<C-U>TmuxNavigateRight<cr>
+"nnoremap <silent> <M-\> :<C-U>TmuxNavigatePrevious<cr>
 " }}}
 " Templates! {{{
 if has("autocmd")

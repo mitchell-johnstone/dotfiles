@@ -16,6 +16,10 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous dia
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
-vim.keymap.set('t', '<Esc>', '<C-\\><C-n>', { desc = 'Open diagnostics list' })
+
+vim.keymap.set('i', '"""', '""""""<Left><Left><Left>', { desc = 'Insert triple double quotes' })
+
+-- Remap for the terminal exit
+vim.keymap.set('t', '<Esc>', '<C-\\><C-n>', { desc = 'Exit the terminal' })
 
 return {}
