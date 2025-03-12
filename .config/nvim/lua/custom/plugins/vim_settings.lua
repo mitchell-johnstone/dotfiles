@@ -72,4 +72,8 @@ vim.o.linebreak = true
 -- set autoread
 vim.opt.autoread = true
 
+-- set foldmethod to marker
+vim.opt.foldmethod = 'marker'
+vim.opt.foldmarker = '{{{,}}}'
+
 return {}
