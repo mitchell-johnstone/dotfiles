@@ -1,0 +1,7 @@
+#!/bin/bash
+ssh-keygen -f "/home/mitchelj/.ssh/known_hosts" -R "admin-bastion.devops.management.directsupply-sandbox.cloud"
+ssh-copy-id mitchelj@admin-bastion.devops.management.directsupply-sandbox.cloud
+ssh-keygen -f "/home/mitchelj/.ssh/known_hosts" -R "admin-bastion.devops.management.directsupply-testing.cloud"
+ssh-copy-id mitchelj@admin-bastion.devops.management.directsupply-testing.cloud
+ssh-keygen -f "/home/mitchelj/.ssh/known_hosts" -R "admin-bastion.devops.management.directsupply.cloud"
+ssh-copy-id mitchelj@admin-bastion.devops.management.directsupply.cloud

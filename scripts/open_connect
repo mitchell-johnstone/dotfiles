@@ -1,0 +1,7 @@
+#!/bin/bash
+sudo openconnect --protocol=gp --usergroup=gateway vpn.msoe.edu | grep -Eo 'https://[^ >]+' | tail
+echo pass:
+read x
+echo $x | sed -n 's/^.*<prelogin-cookie>\(.*\)<\/prelogin-cookie>.*$/\1/p' | sudo openconnect --protocol=gp --user="AD\\johnstonem" --usergroup=gateway:prelogin-cookie --passwd-on-stdin vpn.msoe.edu
+
+# cookie: EWh81YPBtHzYJMWMaYvrfV033OeyeOnX2xqOc/9GBJ8KFJt54hVO/ztl3HVxaFxNCjWwcQ==

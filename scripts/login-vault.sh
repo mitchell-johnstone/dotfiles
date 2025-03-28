@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+# DEV: https://vault.us-east-1.management.directsupply-sandbox.cloud
+# QA: https://vault.us-east-1.management.directsupply-testing.cloud
+# PROD: https://vault.us-east-1.management.directsupply.cloud
+get_vault_addr() {
+    if [[ "${1}" = "dev" ]]
+    then
+        VAULT_ADDR=https://vault.us-east-1.management.directsupply-sandbox.cloud
+    elif [[ "${1}" = "qa" ]]
+    then
+        VAULT_ADDR=https://vault.us-east-1.management.directsupply-testing.cloud
+    elif [[ "${1}" = "prod" ]]
+    then
+        VAULT_ADDR=https://vault.us-east-1.management.directsupply.cloud
+    else
+        echo "Unknown" > /dev/stderr
+        exit 1
+    fi
+    echo $VAULT_ADDR
+}
+
+# Parse command line arguments
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --tier) TIER="$2"; shift ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
+if [ -z "$TIER" ]; then
+    echo "Error: --tier argument is required"
+    exit 1
+fi
+
+export VAULT_ADDR=$(get_vault_addr $TIER)
+vault login -method=oidc
+if [ $? -ne 0 ]; then
+    echo "Vault login failed"
+    exit 1
+fi
+
+SECRET=$(vault read -format=json databases/creds/dssi_menuing_readonly)
+USER=$(echo $SECRET | jq -r '.["data"]["username"]')
+PASSWORD=$(echo $SECRET | jq -r '.["data"]["password"]')
+
+echo $USER > user.secret
+echo $PASSWORD > password.secret
+
+# TODO: start tunnel via appropriate bastion
+
+# TODO: consider using --passfile instead of --password
+# harlequin --user $USER --password $PASSWORD --dbname dssi_menu --port 5434 -h 127.0.0.1
