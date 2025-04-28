@@ -35,10 +35,13 @@ if [ -z "$TIER" ]; then
 fi
 
 export VAULT_ADDR=$(get_vault_addr $TIER)
-vault login -method=oidc
+vault token lookup # Checks if we have a token already?
 if [ $? -ne 0 ]; then
-    echo "Vault login failed"
-    exit 1
+    vault login -method=oidc # Login if we don't have a token already
+    if [ $? -ne 0 ]; then
+        echo "Vault login failed"
+        exit 1
+    fi
 fi
 
 SECRET=$(vault read -format=json databases/creds/dssi_menuing_readonly)

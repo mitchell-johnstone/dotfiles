@@ -2,31 +2,31 @@
         autocrlf = false
 
 [diff]
-        tool = difftastic
+        external = difft
 
-# set difftastic as default
-# [diff]
-#         external = difft
-
-[difftool]
-        prompt = false
-
-[difftool "difftastic"]
-        cmd = difft --diff "$LOCAL" "$REMOTE"
-
-# `git dft` is less to type than `git difftool`.
+# aliases for difftastic
 [alias]
-        dft = "!f() { TMPDIR=~/tmp GIT_EXTERNAL_DIFF=difftastic git diff \"$@\"; }; f"
+        # Difftastic aliases, so `git dlog` is `git log` with difftastic and so on.
+        dlog = -c diff.external=difft log --ext-diff
+        dshow = -c diff.external=difft show --ext-diff
+        ddiff = -c diff.external=difft diff
 
-# `git dlog` to show `git log -p` with difftastic.
-[alias]
-        dlog = -c diff.external=difft log -p --ext-diff
-	st = status -sb
-	ll = log --oneline
+        # `git log` with patches shown with difftastic.
+        dl = -c diff.external=difft log -p --ext-diff
+        # Show the most recent commit with difftastic.
+        ds = -c diff.external=difft show --ext-diff
+        # `git diff` with difftastic.
+        dft = -c diff.external=difft diff
+
+        st = status -sb
+        ll = log --oneline
+
+# My config details
 [user]
         email = mitchell.johnstone@directsupply.com
         name = Mitchell Johnstone
 
+# How should the tool show merge conflicts?
 [mergetool "nvimdiff"]
         layout = "LOCAL,BASE,REMOTE / MERGED"
 [branch]
