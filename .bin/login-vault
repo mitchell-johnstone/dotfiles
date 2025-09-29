@@ -44,14 +44,26 @@ if [ $? -ne 0 ]; then
     fi
 fi
 
+# Create a symlink between appropriate token file and a nicknamed token file
+VAULT_URL=$(get_vault_addr $TIER | sed 's/https:\/\//https___/')
+# VAULT_TOKEN_DIR="$HOME/.vault-tokens"
+# TOKEN_FILE="${VAULT_URL}.token"
+# SYMLINK_FILE="${VAULT_TOKEN_DIR}/${TIER}.token"
+
+# # Create symlink if token file exists
+# if [ -f "${VAULT_TOKEN_DIR}/${TOKEN_FILE}" ]; then
+#     ln -f "${VAULT_TOKEN_DIR}/${TOKEN_FILE}" "$SYMLINK_FILE"
+#     echo "Created symlink: $SYMLINK_FILE -> ${VAULT_TOKEN_DIR}/${TOKEN_FILE}"
+# fi
+
 SECRET=$(vault read -format=json databases/creds/dssi_menuing_readonly)
 USER=$(echo $SECRET | jq -r '.["data"]["username"]')
 PASSWORD=$(echo $SECRET | jq -r '.["data"]["password"]')
 
-echo $USER > user.secret
-echo $PASSWORD > password.secret
+# echo $USER > user.secret
+# echo $PASSWORD > password.secret
 
-# TODO: start tunnel via appropriate bastion
-
-# TODO: consider using --passfile instead of --password
-# harlequin --user $USER --password $PASSWORD --dbname dssi_menu --port 5434 -h 127.0.0.1
+if [ -f ".env" ]; then
+    sed -i "s/^MENUDATABASE_USER=.*/MENUDATABASE_USER=${USER}/" .env
+    sed -i "s/^MENUDATABASE_PASSWORD=.*/MENUDATABASE_PASSWORD=${PASSWORD}/" .env
+fi

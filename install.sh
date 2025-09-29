@@ -6,7 +6,6 @@ sudo apt upgrade
 
 # Download needed packages
 sudo apt install stow # Download stow
-sudo apt install snapd # install snapd to install packages
 sudo apt install curl # install curl!
 sudo apt install cmake  # version 3.22.1-1ubuntu1.22.04.2
 
@@ -18,6 +17,7 @@ sudo apt install build-essential
 sudo apt-get install clangd-12 # c++ compiler
 sudo apt install nodejs # js content
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh # rust!
+curl -LsSf https://astral.sh/uv/install.sh | sh # uv for python development!
 
 # Add other tools!
 sudo apt install bat
@@ -28,6 +28,7 @@ cargo install --locked difftastic
 # Remove old files
 rm -rf ~/.local/share/nvim
 rm -rf ~/.config/nvim
+rm -rf ~/.config/uv
 rm -rf ~/.vim
 rm -rf ~/.tmux.conf
 rm -rf ~/.tmux

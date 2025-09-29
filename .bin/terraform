@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Check if terraform is already installed
+if command -p -v terraform &>/dev/null; then
+    # Use local terraform
+    terraform "$@"
+else
+    # Use docker container
+    docker run --rm -v "$PWD":/workspace -w /workspace hashicorp/terraform:latest "$@"
+fi

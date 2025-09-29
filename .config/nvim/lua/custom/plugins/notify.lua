@@ -1,21 +1,21 @@
 return {
   {
-    "rcarriga/nvim-notify",
+    'rcarriga/nvim-notify',
     config = function()
       pcall(require('telescope').load_extension, 'fzf')
-      require('notify').setup({
-        stages = "fade",
-        timeout = 5000,
-        background_colour = "#000000",
+      require('notify').setup {
+        stages = 'fade',
+        timeout = 50,
+        background_colour = '#000000',
         icons = {
-          ERROR = "",
-          WARN = "",
-          INFO = "",
-          DEBUG = "",
-          TRACE = "✎",
+          ERROR = '',
+          WARN = '',
+          INFO = '',
+          DEBUG = '',
+          TRACE = '✎',
         },
-      })
-      vim.notify = require("notify")
+      }
+      vim.notify = require 'notify'
     end,
   },
 }

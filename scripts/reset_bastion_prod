@@ -1,3 +1,0 @@
-#!/bin/bash
-ssh-keygen -f "/home/mitchelj/.ssh/known_hosts" -R "admin-bastion.devops.management.directsupply.cloud"
-ssh-copy-id mitchelj@admin-bastion.devops.management.directsupply.cloud

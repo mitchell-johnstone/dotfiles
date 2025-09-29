@@ -1,15 +1,15 @@
 -- File for setting the config for the colorscheme
-vim.api.nvim_create_autocmd("VimEnter", {
+vim.api.nvim_create_autocmd('VimEnter', {
   callback = function()
-    vim.cmd("hi! Normal guibg=NONE ctermbg=NONE")
-    vim.cmd("hi! NonText guibg=NONE ctermbg=NONE")
-    vim.cmd("hi! Visual cterm=NONE ctermbg=yellow ctermfg=black guibg=yellow guifg=black")
+    vim.cmd 'hi! Normal guibg=NONE ctermbg=NONE'
+    vim.cmd 'hi! NonText guibg=NONE ctermbg=NONE'
+    vim.cmd 'hi! Visual cterm=NONE ctermbg=yellow ctermfg=black guibg=yellow guifg=black'
   end,
 })
 return {
   -- add gruvbox
   {
-    "ellisonleao/gruvbox.nvim",
+    'ellisonleao/gruvbox.nvim',
     opts = {
       transparent_mode = true,
     },

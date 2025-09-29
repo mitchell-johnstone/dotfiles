@@ -1,0 +1,125 @@
+#!/usr/bin/env bash
+#
+# Vault Token Helper that supports multiple vault addresses
+#
+
+set -eo pipefail
+echo "${HOME}" > /home/mitchelj/test_logging.txt
+
+# Configuration
+TOKEN_DIR="${HOME}/.vault-tokens"
+LOG_FILE="${TOKEN_DIR}/vault-token-helper.log"
+
+# Ensure the token directory exists with proper permissions
+function ensure_token_dir() {
+  mkdir -p "${TOKEN_DIR}" 2>/dev/null || true
+  chmod 700 "${TOKEN_DIR}" 2>/dev/null || true
+}
+
+# Get a safe filename from vault address
+function get_token_file() {
+  local addr="${VAULT_ADDR:-}"
+  if [[ -z "${addr}" ]]; then
+    log_error "VAULT_ADDR environment variable not set"
+    echo "VAULT_ADDR environment variable not set" >&2
+    exit 1
+  fi
+
+  # Sanitize the VAULT_ADDR for use as a filename
+  local safe_addr
+  safe_addr=$(echo "${addr}" | sed 's|[:/]|_|g')
+  echo "${TOKEN_DIR}/${safe_addr}.token"
+}
+
+# Logging functions
+function log_message() {
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" >> "${LOG_FILE}" 2>/dev/null || true
+}
+
+function log_error() {
+  log_message "ERROR: $*"
+}
+
+function log_info() {
+  log_message "INFO: $*"
+}
+
+# Get operation retrieves token for the current VAULT_ADDR
+function get_token() {
+  ensure_token_dir
+  local token_file
+  token_file=$(get_token_file)
+
+  if [[ -f "${token_file}" ]]; then
+    cat "${token_file}"
+    log_info "Token retrieved for ${VAULT_ADDR:-unknown}"
+  else
+    log_info "No token found for ${VAULT_ADDR:-unknown}"
+    # No error returned, just empty string as per Vault requirements
+  fi
+  return 0
+}
+
+# Store operation saves the token for the current VAULT_ADDR
+function store_token() {
+  ensure_token_dir
+  local token_file
+  token_file=$(get_token_file)
+
+  # Read from stdin
+  local token
+  token=$(cat)
+
+  if [[ -z "${token}" ]]; then
+    log_error "Empty token received, not storing"
+    echo "Empty token received" >&2
+    return 1
+  fi
+
+  # Write token to file with tight permissions
+  echo -n "${token}" > "${token_file}"
+  chmod 600 "${token_file}"
+  log_info "Token stored for ${VAULT_ADDR:-unknown}"
+  return 0
+}
+
+# Erase operation removes the token for the current VAULT_ADDR
+function erase_token() {
+  ensure_token_dir
+  local token_file
+  token_file=$(get_token_file)
+
+  if [[ -f "${token_file}" ]]; then
+    rm "${token_file}"
+    log_info "Token erased for ${VAULT_ADDR:-unknown}"
+    return 0
+  else
+    log_info "No token to erase for ${VAULT_ADDR:-unknown}"
+    return 0
+  fi
+}
+
+# Main function
+function main() {
+  local operation="${1:-}"
+
+  case "${operation}" in
+    "get")
+      get_token
+      ;;
+    "store")
+      store_token
+      ;;
+    "erase")
+      erase_token
+      ;;
+    *)
+      echo "Usage: $0 <get|store|erase>" >&2
+      log_error "Invalid operation: ${operation}"
+      exit 1
+      ;;
+  esac
+}
+
+# Run the script with the provided arguments
+main "$@"

@@ -132,27 +132,29 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# pyenv to handle different python versions
-export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-
 # shunpo
 source /home/mitchelj/.local/share/shunpo/shunpo_cmd
 export SHUNPO_DIR=/home/mitchelj/.local/share/shunpo
-# starship
-eval "$(starship init bash)"
-# prompt
-fortune | cowsay | lolcat
-# add custom scripts
-PATH="${PATH}:~/scripts"
+
 # Claude
 #export ANTHROPIC_MODEL='us.anthropic.claude-3-5-haiku-20241022-v1:0'
 #export ANTHROPIC_MODEL='us.anthropic.claude-3-5-sonnet-20241022-v2:0'
-export ANTHROPIC_MODEL='us.anthropic.claude-3-7-sonnet-20250219-v1:0'
+#export ANTHROPIC_MODEL='us.anthropic.claude-3-7-sonnet-20250219-v1:0'
 export CLAUDE_CODE_USE_BEDROCK=1
-export DISABLE_PROMPT_CACHING=1
+export DISABLE_PROMPT_CACHING=0
+
 # nvm
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# start in tmux!
+# Source: https://unix.stackexchange.com/questions/43601/how-can-i-set-my-default-shell-to-start-up-tmux
+if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+  exec tmux
+fi
+
+# starship
+eval "$(starship init bash)"
+# prompt
+fortune | cowsay | lolcat
