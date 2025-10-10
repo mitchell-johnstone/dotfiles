@@ -137,9 +137,10 @@ source /home/mitchelj/.local/share/shunpo/shunpo_cmd
 export SHUNPO_DIR=/home/mitchelj/.local/share/shunpo
 
 # Claude
-#export ANTHROPIC_MODEL='us.anthropic.claude-3-5-haiku-20241022-v1:0'
-#export ANTHROPIC_MODEL='us.anthropic.claude-3-5-sonnet-20241022-v2:0'
-#export ANTHROPIC_MODEL='us.anthropic.claude-3-7-sonnet-20250219-v1:0'
+# export ANTHROPIC_MODEL='us.anthropic.claude-3-5-haiku-20241022-v1:0'
+# export ANTHROPIC_MODEL='us.anthropic.claude-3-5-sonnet-20241022-v2:0'
+# export ANTHROPIC_MODEL='us.anthropic.claude-3-7-sonnet-20250219-v1:0'
+export ANTHROPIC_MODEL='us.anthropic.claude-sonnet-4-5-20250929-v1:0'
 export CLAUDE_CODE_USE_BEDROCK=1
 export DISABLE_PROMPT_CACHING=0
 
@@ -154,6 +155,7 @@ if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] &&
   exec tmux
 fi
 
+export PATH="$PATH:/home/mitchelj/.cargo/bin/"
 # starship
 eval "$(starship init bash)"
 # prompt
