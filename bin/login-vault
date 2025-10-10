@@ -44,18 +44,10 @@ if [ $? -ne 0 ]; then
     fi
 fi
 
-# Create a symlink between appropriate token file and a nicknamed token file
+# Get the correct vault url for given tier
 VAULT_URL=$(get_vault_addr $TIER | sed 's/https:\/\//https___/')
-# VAULT_TOKEN_DIR="$HOME/.vault-tokens"
-# TOKEN_FILE="${VAULT_URL}.token"
-# SYMLINK_FILE="${VAULT_TOKEN_DIR}/${TIER}.token"
 
-# # Create symlink if token file exists
-# if [ -f "${VAULT_TOKEN_DIR}/${TOKEN_FILE}" ]; then
-#     ln -f "${VAULT_TOKEN_DIR}/${TOKEN_FILE}" "$SYMLINK_FILE"
-#     echo "Created symlink: $SYMLINK_FILE -> ${VAULT_TOKEN_DIR}/${TOKEN_FILE}"
-# fi
-
+# Get the password from the tier
 SECRET=$(vault read -format=json databases/creds/dssi_menuing_readonly)
 USER=$(echo $SECRET | jq -r '.["data"]["username"]')
 PASSWORD=$(echo $SECRET | jq -r '.["data"]["password"]')

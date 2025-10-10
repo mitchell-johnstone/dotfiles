@@ -1,0 +1,244 @@
+#!/bin/bash
+
+# work - A script to manage git worktrees across multiple repositories
+# Usage: work [branch_name]
+
+set -e
+
+# Configuration
+REPOS_DIR="$HOME/repos"
+
+# Colors for better output
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[0;33m'
+NC='\033[0m' # No Color
+
+# Function to check if current directory has worktrees
+detect_existing_branch() {
+    local branch=""
+
+    # Find first git worktree/repo and get its branch
+    for dir in */; do
+        # Check if it's a git repository or worktree (both regular repos and worktrees)
+        if [ -d "${dir}.git" ] || [ -f "${dir}.git" ]; then
+            cd "${dir%/}"
+            branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+            cd - > /dev/null
+
+            # If we found a branch, we can stop looking
+            if [ -n "$branch" ]; then
+                break
+            fi
+        fi
+    done
+
+    echo "$branch"
+}
+
+# Function to list repositories and allow selection
+select_repos() {
+    local existing_repos=()
+
+    # Find directories that already have worktrees
+    for dir in */; do
+        if [ -d "${dir}.git" ] || [ -f "${dir}.git" ]; then
+            existing_repos+=("${dir%/}")
+        fi
+    done
+
+    # List all available repositories
+    local repos=()
+    for repo in "$REPOS_DIR"/*; do
+        if [ -d "$repo/.git" ]; then
+            repo_name=$(basename "$repo")
+            # Skip repos that already have worktrees
+            if [[ ! " ${existing_repos[@]} " =~ " ${repo_name} " ]]; then
+                repos+=("$repo_name")
+            fi
+        fi
+    done
+
+    if [ ${#repos[@]} -eq 0 ]; then
+        echo -e "${YELLOW}No additional repositories found or all repositories already have worktrees in this directory.${NC}" >&2
+        exit 0
+    fi
+
+    # Use whiptail for selection if available, otherwise use simple read
+    if command -v whiptail &> /dev/null; then
+        local choices=()
+        for i in "${!repos[@]}"; do
+            choices+=("${repos[i]}" "" OFF)
+        done
+
+        # Add an "All repositories" option
+        choices+=("ALL" "Select all repositories" OFF)
+
+        # For colors in whiptail
+        export NEWT_COLORS='
+        window=black,red
+        border=white,red
+        textbox=white,red
+        button=black,white
+        '
+
+        selected=$(whiptail --title "Select Repositories" --separate-output --checklist \
+            "Choose repositories to create worktrees:" 20 78 15 "${choices[@]}" 3>&1 1>&2 2>&3)
+
+        if [ $? -ne 0 ]; then
+            echo -e "${YELLOW}No repositories selected.${NC}" >&2
+            exit 0
+        fi
+
+        # Convert newline-separated string to array
+        local selected_repos=()
+        # Check if ALL was selected
+        if grep -q "ALL" <<< "$selected"; then
+            selected_repos=("${repos[@]}")
+        else
+            while read -r line; do
+                # Only add if line is not empty and not "ALL"
+                if [ -n "$line" ] && [ "$line" != "ALL" ]; then
+                    selected_repos+=("$line")
+                fi
+            done <<< "$selected"
+        fi
+
+        # Return each repo name on a new line to avoid splitting issues
+        printf '%s\n' "${selected_repos[@]}"
+    else
+        # Simple text-based selection
+        echo "Available repositories:"
+        for i in "${!repos[@]}"; do
+            echo "$((i+1)). ${repos[i]}"
+        done
+
+        echo -e "${BLUE}Enter repository numbers separated by space (e.g., '1 3 4') or 'a' for all:${NC}"
+        read -r selections
+
+        local selected_repos=()
+
+        # Handle 'a' for all repos
+        if [ "$selections" = "a" ]; then
+            selected_repos=("${repos[@]}")
+        else
+            # Process individual selections
+            for num in $selections; do
+                if [ "$num" -le "${#repos[@]}" ] && [ "$num" -gt 0 ]; then
+                    selected_repos+=("${repos[$((num-1))]}")
+                fi
+            done
+        fi
+
+        if [ ${#selected_repos[@]} -eq 0 ]; then
+            echo -e "${YELLOW}No valid repositories selected.${NC}" >&2
+            exit 0
+        fi
+
+        # Return each repo name on a new line to avoid splitting issues
+        printf '%s\n' "${selected_repos[@]}"
+    fi
+}
+
+# Function to create worktrees
+create_worktrees() {
+    local branch="$1"
+    shift
+    local selected_repos=("$@")
+
+    for repo in "${selected_repos[@]}"; do
+        # Skip empty lines
+        if [ -z "$repo" ]; then
+            continue
+        fi
+
+        echo -e "${BLUE}Creating worktree for '$repo' on branch $branch...${NC}" >&2
+
+        # Check if repository exists
+        if [ ! -d "$REPOS_DIR/$repo/.git" ]; then
+            echo -e "${YELLOW}Repository '$repo' not found, skipping...${NC}" >&2
+            continue
+        fi
+
+        # Create worktree
+        (
+            current_dir="$PWD"
+            cd "$REPOS_DIR/$repo"
+
+            # Update main
+            git checkout main
+            git pull
+
+            # Check if branch exists, create if it doesn't
+            if ! git show-ref --verify --quiet "refs/heads/$branch"; then
+                echo -e "${YELLOW}Branch $branch does not exist in '$repo', creating...${NC}" >&2
+                git checkout -b "$branch"
+                git checkout - > /dev/null 2>&1
+            fi
+
+            # Create the worktree
+            git worktree add "$current_dir/$repo" "$branch"
+            echo -e "${GREEN}Worktree for '$repo' created successfully.${NC}" >&2
+
+            # Soft link shared files
+            if [ -f "$REPOS_DIR/$repo/CLAUDE.md" ]; then
+                ln -sf "$REPOS_DIR/$repo/CLAUDE.md" "$current_dir/$repo/CLAUDE.md"
+                echo -e "${GREEN}Linked CLAUDE.md${NC}" >&2
+            fi
+
+            # Special case soft linking for dssi.menuing.database
+            if [ "$repo" = "dssi.menuing.database" ]; then
+                if [ -f "$REPOS_DIR/$repo/dump_prod_bin.sh" ]; then
+                    ln -sf "$REPOS_DIR/$repo/dump_prod_bin.sh" "$current_dir/$repo/dump_prod_bin.sh"
+                    echo -e "${GREEN}Linked dump_prod_bin.sh${NC}" >&2
+                fi
+                if [ -f "$REPOS_DIR/$repo/setup_preserved_db.sh" ]; then
+                    ln -sf "$REPOS_DIR/$repo/setup_preserved_db.sh" "$current_dir/$repo/setup_preserved_db.sh"
+                    echo -e "${GREEN}Linked setup_preserved_db.sh${NC}" >&2
+                fi
+                if [ -f "$REPOS_DIR/$repo/scripts/post-local/truncate_all_data.sql" ]; then
+                    mkdir -p "$current_dir/$repo/scripts/post-local"
+                    # Hard link so it can copy into the docker container properly
+                    ln -f "$REPOS_DIR/$repo/scripts/post-local/truncate_all_data.sql" "$current_dir/$repo/scripts/post-local/truncate_all_data.sql"
+                    echo -e "${GREEN}Linked truncate_all_data.sql${NC}" >&2
+                fi
+            fi
+
+            # # Special case soft linking for dssi.gourmet.web
+            # if [ "$repo" = "dssi.gourmet.web" ]; then
+            #     ln -sf "$REPOS_DIR/$repo/.yarnrc.yml" "$current_dir/$repo/.yarnrc.yml"
+            # fi
+        ) || echo -e "${YELLOW}Failed to create worktree for '$repo'.${NC}" >&2
+    done
+}
+
+# Main script
+
+# Check if branch was provided as argument or needs to be detected
+BRANCH=""
+if [ $# -eq 1 ]; then
+    BRANCH="$1"
+else
+    # Try to detect branch from existing worktrees
+    BRANCH=$(detect_existing_branch)
+
+    # If no branch was detected, ask for one
+    if [ -z "$BRANCH" ]; then
+        echo -e "${BLUE}Enter branch name for worktrees:${NC}" >&2
+        read -r BRANCH
+
+        if [ -z "$BRANCH" ]; then
+            echo -e "${YELLOW}No branch name provided. Exiting.${NC}" >&2
+            exit 1
+        fi
+    else
+        echo -e "${GREEN}Detected existing branch: $BRANCH${NC}" >&2
+    fi
+fi
+
+# Select repositories and create worktrees
+IFS=$'\n' SELECTED_REPOS=($(select_repos))
+if [ ${#SELECTED_REPOS[@]} -gt 0 ]; then
+    create_worktrees "$BRANCH" "${SELECTED_REPOS[@]}"
+    echo -e "${GREEN}All worktrees created on branch: $BRANCH${NC}" >&2
+fi

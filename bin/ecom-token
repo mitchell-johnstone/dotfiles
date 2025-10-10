@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+get_ecom_auth_addr() {
+    if [[ "${1}" = "dev" ]]
+    then
+        ECOM_ADDR=https://devecommerceauthenticationwindows.directs.com/api/v1/authentication/access
+    elif [[ "${1}" = "qa" ]]
+    then
+        ECOM_ADDR=https://qaecommerceauthenticationwindows.directs.com/api/v1/authentication/access
+    elif [[ "${1}" = "prod" ]]
+    then
+        ECOM_ADDR=https://ecommerceauthenticationwindows.directs.com/api/v1/authentication/access
+    else
+        echo "Unknown" > /dev/stderr
+        exit 1
+    fi
+    echo $ECOM_ADDR
+}
+
+# Parse command line arguments
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --tier) TIER="$2"; shift ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
+if [ -z "$TIER" ]; then
+    echo "Error: --tier argument is required"
+    exit 1
+fi
+
+# get the ecom authentication address
+export ECOM_ADDR=$(get_ecom_auth_addr $TIER)
+# get the acess token
+export TOKEN=$(powershell.exe -Command "(Invoke-RestMethod ${ECOM_ADDR} -UseDefaultCredentials).access_token")
+
+# echo out for cli usage
+echo "$TOKEN"
+# copy to clipboard for simple swagger testing
+echo "$TOKEN" | clip.exe
