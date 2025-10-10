@@ -7,7 +7,8 @@ sudo apt upgrade
 # Download needed packages
 sudo apt install stow # Download stow
 sudo apt install curl # install curl!
-sudo apt install cmake  # version 3.22.1-1ubuntu1.22.04.2
+sudo apt install cmake # version 3.22.1-1ubuntu1.22.04.2
+sudo apt install cargo # Rust (mostly to builds the difftastic crate below)
 
 # For cowsay / lolcat / fortune fun
 sudo apt-get install cowsay fortune lolcat # install cowsay features
