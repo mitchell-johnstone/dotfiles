@@ -10,3 +10,13 @@ alias sonnet="ANTHROPIC_MODEL='us.anthropic.claude-3-7-sonnet-20250219-v1:0' cla
 alias haiku="ANTHROPIC_MODEL='us.anthropic.claude-3-5-haiku-20241022-v1:0' claude"
 alias hq="harlequin"
 alias clauded="claude --dangerously-skip-permissions"
+
+tempe () {
+  cd "$(mktemp -d)"
+  chmod -R 0700 .
+  if [[ $# -eq 1 ]]; then
+    \mkdir -p "$1"
+    cd "$1"
+    chmod -R 0700 .
+  fi
+}

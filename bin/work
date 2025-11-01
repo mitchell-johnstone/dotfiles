@@ -170,7 +170,7 @@ create_worktrees() {
             git pull
 
             # Check if branch exists, create if it doesn't
-            if ! git show-ref --verify --quiet "refs/heads/$branch"; then
+            if ! git ls-remote --exit-code --heads origin $branch > /dev/null; then
                 echo -e "${YELLOW}Branch $branch does not exist in '$repo', creating...${NC}" >&2
                 git checkout -b "$branch"
                 git checkout - > /dev/null 2>&1

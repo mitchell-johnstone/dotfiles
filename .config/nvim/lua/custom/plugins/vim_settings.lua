@@ -72,8 +72,14 @@ vim.o.linebreak = true
 -- set autoread
 vim.opt.autoread = true
 
--- set foldmethod to marker
-vim.opt.foldmethod = 'marker'
-vim.opt.foldmarker = '{{{,}}}'
+-- set foldmethod
+-- vim.opt.foldmethod = 'marker'
+-- vim.opt.foldmarker = '{{{,}}}'
+
+-- set foldmethod to use treesitter's fold syntax
+vim.opt.foldmethod = 'expr'
+vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+vim.opt.foldlevel = 99
+vim.opt.foldenable = true
 
 return {}
