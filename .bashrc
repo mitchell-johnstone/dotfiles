@@ -144,11 +144,6 @@ export ANTHROPIC_MODEL='us.anthropic.claude-sonnet-4-5-20250929-v1:0'
 export CLAUDE_CODE_USE_BEDROCK=1
 export DISABLE_PROMPT_CACHING=0
 
-# nvm
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 # start in tmux!
 # Source: https://unix.stackexchange.com/questions/43601/how-can-i-set-my-default-shell-to-start-up-tmux
 if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
@@ -156,7 +151,11 @@ if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] &&
 fi
 
 export PATH="$PATH:/home/mitchelj/.cargo/bin/"
+export PATH="$HOME/bin/agent:$PATH"
+export PATH="$HOME/.local/omnisharp:$PATH"
+
 # starship
 eval "$(starship init bash)"
 # prompt
 fortune | cowsay | lolcat
+eval "$(~/.local/bin/mise activate bash)"

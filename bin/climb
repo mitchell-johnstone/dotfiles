@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Usage: climb <folder_name>
+# Searches upward from the current directory to find the first instance of the given folder.
+
+# Exit if no argument provided
+if [ -z "$1" ]; then
+  echo "Usage: $0 <folder_name>"
+  exit 1
+fi
+
+target="$1"
+dir="$PWD"
+
+# Climb the directory tree
+while [ "$dir" != "/" ]; do
+  if [ -d "$dir/$target" ]; then
+    cd "$dir/$target" || {
+      echo "Failed to cd into $dir/$target"
+      return 1 2>/dev/null || exit 1
+    }
+    echo "Changed directory to: $dir/$target"
+    return 0 2>/dev/null || exit 0
+  fi
+  dir=$(dirname "$dir")
+done
+
+echo "No folder named '$target' found above $PWD"
+return 1 2>/dev/null || exit 1

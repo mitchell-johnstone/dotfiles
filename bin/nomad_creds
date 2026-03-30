@@ -30,7 +30,8 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 if [ -z "$TIER" ]; then
-    echo "Error: --tier argument is required"
+    echo "Error: --tier {tier} argument is required"
+    echo "       Available tiers: [dev, qa, prod]"
     exit 1
 fi
 

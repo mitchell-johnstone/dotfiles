@@ -29,10 +29,10 @@ return {
     local dapui = require 'dapui'
     return {
       -- Basic debugging keymaps, feel free to change to your liking!
-      { '<F5>',      dap.continue,          desc = 'Debug: Start/Continue' },
-      { '<F1>',      dap.step_into,         desc = 'Debug: Step Into' },
-      { '<F2>',      dap.step_over,         desc = 'Debug: Step Over' },
-      { '<F3>',      dap.step_out,          desc = 'Debug: Step Out' },
+      { '<F5>', dap.continue, desc = 'Debug: Start/Continue' },
+      { '<F1>', dap.step_into, desc = 'Debug: Step Into' },
+      { '<F2>', dap.step_over, desc = 'Debug: Step Over' },
+      { '<F3>', dap.step_out, desc = 'Debug: Step Out' },
       { '<leader>b', dap.toggle_breakpoint, desc = 'Debug: Toggle Breakpoint' },
       {
         '<leader>B',
@@ -61,9 +61,11 @@ return {
 
       -- You'll need to check that you have the required things installed
       -- online, please don't ask me how to install them :)
+      -- https://github.com/jay-babu/mason-nvim-dap.nvim/blob/main/lua/mason-nvim-dap/mappings/source.lua
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
         'delve',
+        'coreclr',
       },
     }
 
@@ -99,6 +101,23 @@ return {
         -- On Windows delve must be run attached or it crashes.
         -- See https://github.com/leoluz/nvim-dap-go/blob/main/README.md#configuring
         detached = vim.fn.has 'win32' == 0,
+      },
+    }
+
+    -- C# / .NET configuration
+    dap.configurations.cs = {
+      {
+        type = 'coreclr',
+        name = 'launch - netcoredbg',
+        request = 'launch',
+        program = '/bin/Debug/net8.0/DSSI.Menuing.API.dll',
+        -- program = function()
+        --   return vim.fn.input('Path to dll: ', vim.fn.getcwd() .. '/bin/Debug/net8.0/', 'file')
+        -- end,
+        cwd = '${workspaceFolder}',
+        env = {
+          ASPNETCORE_ENVIRONMENT = 'Development',
+        },
       },
     }
   end,

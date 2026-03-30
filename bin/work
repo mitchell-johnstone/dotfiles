@@ -188,13 +188,22 @@ create_worktrees() {
 
             # Special case soft linking for dssi.menuing.database
             if [ "$repo" = "dssi.menuing.database" ]; then
+                # Link helper scripts
                 if [ -f "$REPOS_DIR/$repo/dump_prod_bin.sh" ]; then
                     ln -sf "$REPOS_DIR/$repo/dump_prod_bin.sh" "$current_dir/$repo/dump_prod_bin.sh"
                     echo -e "${GREEN}Linked dump_prod_bin.sh${NC}" >&2
                 fi
-                if [ -f "$REPOS_DIR/$repo/setup_preserved_db.sh" ]; then
-                    ln -sf "$REPOS_DIR/$repo/setup_preserved_db.sh" "$current_dir/$repo/setup_preserved_db.sh"
-                    echo -e "${GREEN}Linked setup_preserved_db.sh${NC}" >&2
+                if [ -f "$REPOS_DIR/$repo/dump_qa_bin.sh" ]; then
+                    ln -sf "$REPOS_DIR/$repo/dump_qa_bin.sh" "$current_dir/$repo/dump_qa_bin.sh"
+                    echo -e "${GREEN}Linked dump_qa_bin.sh${NC}" >&2
+                fi
+                if [ -f "$REPOS_DIR/$repo/setup_preserved_prod_db.sh" ]; then
+                    ln -sf "$REPOS_DIR/$repo/setup_preserved_prod_db.sh" "$current_dir/$repo/setup_preserved_prod_db.sh"
+                    echo -e "${GREEN}Linked setup_preserved_prod_db.sh${NC}" >&2
+                fi
+                if [ -f "$REPOS_DIR/$repo/setup_preserved_qa_db.sh" ]; then
+                    ln -sf "$REPOS_DIR/$repo/setup_preserved_qa_db.sh" "$current_dir/$repo/setup_preserved_qa_db.sh"
+                    echo -e "${GREEN}Linked setup_preserved_qa_db.sh${NC}" >&2
                 fi
                 if [ -f "$REPOS_DIR/$repo/scripts/post-local/truncate_all_data.sql" ]; then
                     mkdir -p "$current_dir/$repo/scripts/post-local"
@@ -211,6 +220,45 @@ create_worktrees() {
         ) || echo -e "${YELLOW}Failed to create worktree for '$repo'.${NC}" >&2
     done
 }
+
+# perform post-processing once all the worktree branches set up in the workspace
+postprocessing() {
+    current_dir="$PWD"
+
+    # Copy docker-compose from shared location if not present
+    if [ ! -f "$current_dir/docker-compose.yml" ]; then
+        if [ -f "$HOME/workspaces/docker-compose-full-stack-menu.yml" ]; then
+            cp "$HOME/workspaces/docker-compose-full-stack-menu.yml" "$current_dir/docker-compose.yml"
+            echo -e "${GREEN}Copied docker-compose.yml from shared location${NC}" >&2
+        fi
+    fi
+
+    # Create docker directory and Dockerfile for dssi.gourmet.web if the worktree exists
+    if [ -d "$current_dir/dssi.gourmet.web" ] && [ ! -d "$current_dir/dssi.gourmet.web/docker" ]; then
+        mkdir -p "$current_dir/dssi.gourmet.web/docker"
+        cat > "$current_dir/dssi.gourmet.web/docker/Dockerfile" << 'DOCKERFILE_EOF'
+FROM node:22.20-alpine
+
+WORKDIR /app
+
+# Copy package.json, yarn.lock, and yarn configuration
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY .yarn ./.yarn
+COPY .pnp.cjs .pnp.loader.mjs ./
+
+# Copy all source files
+COPY . .
+
+# Expose the Vite dev server port
+EXPOSE 9229
+
+# Run the development server
+CMD ["yarn", "dev", "--host", "0.0.0.0"]
+DOCKERFILE_EOF
+        echo -e "${GREEN}Created docker/Dockerfile for dssi.gourmet.web${NC}" >&2
+    fi
+}
+
 
 # Main script
 
@@ -242,3 +290,6 @@ if [ ${#SELECTED_REPOS[@]} -gt 0 ]; then
     create_worktrees "$BRANCH" "${SELECTED_REPOS[@]}"
     echo -e "${GREEN}All worktrees created on branch: $BRANCH${NC}" >&2
 fi
+
+# perform postprocessing
+postprocessing

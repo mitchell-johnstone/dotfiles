@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# cleanup_workspace - A script to cleanup a workspace
+# Usage: cleanup_workspace
+
+set -e
+
+# Main script
+
+echo "This will remove all worktrees in the subfolders of this repo."
+echo "Are you sure you want to proceed? [y/Y]"
+PROCEED=""
+read -r PROCEED
+if [[ $PROCEED == "y" || $PROCEED == "Y" ]]; then
+    for folder in *; do (cd $folder && git worktree remove . -f); done
+    CUR_DIR="${pwd}"
+    cd ..
+    rm CUR_DIR -f
+fi

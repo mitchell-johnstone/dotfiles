@@ -20,3 +20,31 @@ tempe () {
     chmod -R 0700 .
   fi
 }
+
+alias gen=". climb dssi.menuing.generateoptimizationsuggestions.processor"
+alias mlapi=". climb dssi.menuing.mlapi"
+alias menu=". climb dssi.menuing.api"
+alias db=". climb dssi.menuing.database"
+alias web=". climb dssi.gourmet.web"
+alias api=". climb dssi.gourmet.api"
+
+alias run_local='dotnet run --launch-profile "https - local"'
+
+# Formatting for specific repos
+format() {
+  dir_name="$(basename "$(pwd)")"
+  if [[ "$dir_name" == "dssi.menuing.mlapi" ]]; then
+    mise run install
+    mise format
+    mise lint
+  elif [[ "$dir_name" == "dssi.menuing.api" ]]; then
+    dotnet csharpier .
+  else
+    echo "No idea"
+  fi
+}
+
+# I tend to search for something and then want to open it in vim
+rgv() {
+  vim -q <(rg --vimgrep "$@") -c "copen"
+}
